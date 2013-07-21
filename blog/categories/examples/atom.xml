@@ -4,7 +4,7 @@
   <title><![CDATA[Category: examples | _habnablog]]></title>
   <link href="http://blog.habnab.it/blog/categories/examples/atom.xml" rel="self"/>
   <link href="http://blog.habnab.it/"/>
-  <updated>2013-07-21T11:23:47-07:00</updated>
+  <updated>2013-07-21T11:32:09-07:00</updated>
   <id>http://blog.habnab.it/</id>
   <author>
     <name><![CDATA[_Harold Abnabit]]></name>
@@ -23,6 +23,9 @@ for making remote calls. I&rsquo;ve developed a bit of a fetish for SSL client
 certificates, so I was hoping to use that for authenticating clients. AMP does
 have <a href="http://twistedmatrix.com/documents/current/api/twisted.protocols.amp.StartTLS.html">STARTTLS</a> support builtin, but I couldn&rsquo;t find any examples! Here&rsquo;s what
 I found and figured out, for future hackers:</p>
+
+<!-- more -->
+
 
 <h2>Always initiate from the client</h2>
 

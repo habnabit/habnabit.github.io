@@ -4,7 +4,7 @@
   <title><![CDATA[Category: emacs | _habnablog]]></title>
   <link href="http://blog.habnab.it/blog/categories/emacs/atom.xml" rel="self"/>
   <link href="http://blog.habnab.it/"/>
-  <updated>2013-07-21T11:23:47-07:00</updated>
+  <updated>2013-07-21T11:32:09-07:00</updated>
   <id>http://blog.habnab.it/</id>
   <author>
     <name><![CDATA[_Harold Abnabit]]></name>
@@ -35,6 +35,9 @@ to edit, and waits until emacs says it&rsquo;s done with them.</p>
 my local emacs instance through emacsclient on a remote host. This meant that
 <code>$EDITOR</code> had to be set to something that spawned an editor on the remote host,
 which was becoming increasingly frustrating.</p>
+
+<!-- more -->
+
 
 <p>In the past I&rsquo;d tried doing things like using an ssh tunnel to forward the
 emacsclient connections from the remote host to my local machine, but
