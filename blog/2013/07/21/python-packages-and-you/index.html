@@ -1,0 +1,439 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Python Packages and You - _habnablog</title>
+	<meta name="author" content="_Harold Abnabit">
+
+	
+	<meta name="description" content="Jean-Paul Calderone wrote an excellent blog post on the right way to
+structure a python project. This post will build on that post by covering &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="_habnablog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-42613766-1', 'habnab.it');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">_habnablog</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:blog.habnab.it">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		
+		<a class="github" href="https://github.com/habnabit" title="GitHub">GitHub</a>
+		
+    
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+    
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:blog.habnab.it">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Python Packages and You</h2>
+	<div class="entry-content"><p>Jean-Paul Calderone wrote <a href="http://as.ynchrono.us/2007/12/filesystem-structure-of-python-project_21.html">an excellent blog post</a> on the right way to
+structure a python project. This post will build on that post by covering
+concrete examples of how to write imports, how to distribute your package, and
+what not to do.</p>
+
+<!-- more -->
+
+
+<p>As an example, we&rsquo;ll be looking at my own project, <a href="https://github.com/habnabit/passacre">passacre</a>. There is a
+python package called <code>passacre</code> immediately in the root of the project
+(i.e. not in a <code>lib</code> or <code>src</code> directory). Here&rsquo;s what&rsquo;s inside it:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>passacre/__init__.py
+</span><span class='line'>passacre/__main__.py
+</span><span class='line'>passacre/application.py
+</span><span class='line'>passacre/config.py
+</span><span class='line'>passacre/generator.py
+</span><span class='line'>passacre/multibase.py
+</span><span class='line'>passacre/test/__init__.py
+</span><span class='line'>passacre/test/test_application.py
+</span><span class='line'>passacre/test/test_config.py
+</span><span class='line'>passacre/test/test_generator.py
+</span><span class='line'>passacre/test/test_multibase.py
+</span><span class='line'>passacre/test/util.py
+</span><span class='line'>passacre/util.py</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Intra-package imports</h2>
+
+<p>There is exactly one way code in your package should be importing other code
+inside your package, and that&rsquo;s with <em>absolute imports</em>.</p>
+
+<h3>Basic imports</h3>
+
+<p>So, in this code, <code>passacre.config</code> needs to import some things from
+<code>passacre.multibase</code>. The import looks like this:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">passacre.multibase</span> <span class="kn">import</span> <span class="n">MultiBase</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that the import uses the fully-qualified name of the module,
+<code>passacre.multibase</code>. This is important for two reasons:</p>
+
+<ol>
+<li>It makes your code very explicit in what you&rsquo;re importing.</li>
+<li>Your code will continue to work in the future. There&rsquo;s a very, very old
+method of doing imports (&ldquo;implicit relative imports&rdquo;) wherein one would
+write <code>from multibase import Multibase</code> instead, but this is
+<a href="http://www.python.org/dev/peps/pep-0328/">gone in python 3</a>. It <a href="http://bugs.python.org/issue14494">should&rsquo;ve been removed from python 2.7</a>, but
+unfortunately, <a href="http://mail.python.org/pipermail/python-dev/2010-April/099607.html">they forgot to do it</a>.</li>
+</ol>
+
+
+<p>There is another style of imports also covered in <a href="http://www.python.org/dev/peps/pep-0328/">PEP 328</a>, wherein the
+code would look instead look like this:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">.multibase</span> <span class="kn">import</span> <span class="n">MultiBase</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I&rsquo;ll only mention explicit relative imports once more in this post; I very much
+prefer the look of absolute imports, but this is primarily an issue of style.</p>
+
+<h3>Test module imports</h3>
+
+<p><code>passacre</code> also comes with a test suite in the <code>passacre.test</code> submodule. These
+tests necessarily have to import the passacre code to test it. Here&rsquo;s what the
+<code>passacre.test.test_multibase</code> module does to import <code>passacre.multibase</code>:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">passacre.multibase</span> <span class="kn">import</span> <span class="n">MultiBase</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>&ldquo;But wait! That&rsquo;s the same as before!&rdquo; you cry. Since the fully-qualified
+module name is always the same, <em>the imports are also always the same</em>. This is
+another advantage of absolute imports&mdash;you always know exactly what you&rsquo;re
+getting.</p>
+
+<h3>Sibling subpackage imports</h3>
+
+<p>For demonstration purposes, we&rsquo;ll pretend that there&rsquo;s another subpackage
+<code>passacre.test2</code> that contains even more tests. Here&rsquo;s the imaginary addition
+to the package structure:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>passacre/test2/__init__.py
+</span><span class='line'>passacre/test2/test_multibase.py</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This <code>test_multibase</code> module needs to use some utility function from
+<code>passacre.test.util</code>, so it imports the function:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">passacre.test.util</span> <span class="kn">import</span> <span class="n">excinfo_arg_0</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using absolute imports means that it doesn&rsquo;t matter where in the project a
+module is when you try to import another module. Python will always look up the
+module to import from the root of your package.</p>
+
+<h3>Shadowed standard library module imports</h3>
+
+<p>Something I&rsquo;m <em>sure</em> everyone has done at some point in their python career is
+name a module the same as a module in the standard library. If I wanted a
+<code>passacre.socket</code> module that used the standard library <code>socket</code> module,
+<code>import socket</code> should give me the standard library module instead of
+<code>passacre.socket</code>. <a href="http://www.python.org/dev/peps/pep-0328/">PEP 328</a> covers this too by adding a <code>__future__</code>
+feature <code>absolute_import</code>, which is on by default in python 3.0 and higher.</p>
+
+<p>Activating <code>absolute_import</code> has exactly one effect: disabling implicit
+relative imports. Since <code>__future__</code> features only affect the module enabling
+them, I can simply add <code>from __future__ import absolute_import</code> to
+<code>passacre/socket.py</code> and any <code>import socket</code> calls in it will import the
+standard library <code>socket</code> module.</p>
+
+<h2>Distribution</h2>
+
+<p>Once your package has some code in it that can run, you&rsquo;ll probably want to let
+other people use your package as well.</p>
+
+<h3><code>setup.py</code></h3>
+
+<p><code>setup.py</code> is your package&rsquo;s entry point into <a href="http://docs.python.org/2/distutils/">distutils</a> or
+<a href="http://pythonhosted.org/setuptools/">setuptools</a>. Every package should have one, as that&rsquo;s how your code gets
+put into the right place for your users. I won&rsquo;t go too much into detail in how
+to use them; the links above are for tutorials which will explain how to get
+started.</p>
+
+<p>My own rule of thumb is to use distutils unless I absolutely require a feature
+from setuptools. Some people will say to always use setuptools, and that&rsquo;s okay
+too.</p>
+
+<h3>Executable scripts</h3>
+
+<p><a href="http://as.ynchrono.us/2007/12/filesystem-structure-of-python-project_21.html">Jean-Paul&rsquo;s post</a> recommends putting python scripts in the <code>bin</code> directory
+of your project root. This is fine advice, but there are newer methods which
+mean you don&rsquo;t need a <code>bin</code> directory at all.</p>
+
+<p>First, there&rsquo;s <code>__main__.py</code>. This is not quite the same as an executable
+script, but it allows a package to be executed via <code>python -m</code>. For example,
+<code>passacre/__main__.py</code> means that one can execute <code>python -m passacre</code> and the
+<code>__main__.py</code> file will be executed. <a href="http://www.python.org/dev/peps/pep-0338/">PEP 338</a> has more details on exactly
+how this works.</p>
+
+<p><code>passacre/__main__.py</code> is fairly small:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">passacre.application</span> <span class="kn">import</span> <span class="n">main</span>
+</span><span class='line'><span class="n">main</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Since <code>__main__.py</code> is executed directly, the actual main function should live
+elsewhere if you actually want to be able to test it. This way, test code can
+<em>also</em> <code>from passacre.application import main</code> and be able to call that
+function.</p>
+
+<p>But, sometimes a project has multiple executables or otherwise wants to not
+have to require users to do <code>python -m theirpackage</code>. For this case, setuptools
+has <a href="http://pythonhosted.org/setuptools/setuptools.html#automatic-script-creation">automatic script creation</a>. Here&rsquo;s an excerpt from passacre&rsquo;s
+<code>setup.py</code> file:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># [...]</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">setup</span><span class="p">(</span>
+</span><span class='line'>    <span class="c"># [...]</span>
+</span><span class='line'>    <span class="n">entry_points</span><span class="o">=</span><span class="p">{</span>
+</span><span class='line'>        <span class="s">&#39;console_scripts&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;passacre = passacre.application:main&#39;</span><span class="p">],</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>(The actual <code>setup.py</code> uses <a href="http://pythonhosted.org/setuptools/setuptools.html#declaring-extras-optional-features-with-their-own-dependencies">extras</a>, but that&rsquo;s not important for this blog
+post.)</p>
+
+<p>This <code>console_scripts</code> definition makes a <code>passacre</code> executable that does the
+same thing as the <code>__main__.py</code> script did: imports the <code>main</code> function from
+<code>passacre.application</code> and calls it.</p>
+
+<p>Using distutils or setuptools to generate and/or install your python scripts is
+important&mdash;as a part of the install process, the shebang line (e.g.
+<code>#!/usr/bin/env python</code>) will be <em>rewritten</em> to use the python that ran
+<code>setup.py</code>. So, if someone does <code>/usr/local/bin/python2.6 setup.py install</code>,
+<code>passacre</code> will start with <code>#!/usr/local/bin/python2.6</code>.</p>
+
+<h2>Documentation</h2>
+
+<p>Please have some, especially if you&rsquo;re distributing your package. Docstrings
+are a good start, but a tutorial written with <a href="http://sphinx-doc.org/">sphinx</a> and/or a <code>README</code>
+with usage examples goes a long way.</p>
+
+<h2>Common pitfalls</h2>
+
+<p>The first one is such a common issue that I&rsquo;m going to make a subheading just
+to say:</p>
+
+<h3>Don&rsquo;t directly run modules inside packages</h3>
+
+<p>Seriously. Never ever <em>ever</em> do this. What I mean specifically is doing <code>python
+passacre/__main__.py</code>, or <code>python passacre/test/test_application.py</code>, or
+anything else that starts with <code>python passacre/</code>. This will prevent python
+from knowing where the root of your package is, and so absolute imports and
+explicit relative imports will fail, or not import the code you think it should
+be importing.</p>
+
+<p>If you think you have to do this, <strong>you&rsquo;re wrong</strong>. Instead, you probably want
+to use <code>python -m</code>, or <a href="http://pythonhosted.org/setuptools/setuptools.html#automatic-script-creation">generate an executable script to run</a>, or
+<a href="http://pytest.org/">use a test runner</a>. If you don&rsquo;t think any of those cover your use case,
+leave a comment and I&rsquo;ll show you a better method.</p>
+
+<h3>Don&rsquo;t set <code>PYTHONPATH</code></h3>
+
+<p>If you think you have to set <code>PYTHONPATH</code>, you&rsquo;ve probably fallen victim to the
+first pitfall and are trying to execute a module directly. With proper package
+layout and proper imports, you won&rsquo;t need to set <code>PYTHONPATH</code> to run your code.</p>
+
+<h3>Don&rsquo;t modify <code>sys.path</code> from code in your package</h3>
+
+<p>Like modifying <code>PYTHONPATH</code>, but worse because it&rsquo;s easier to affect other
+people using your code. <strong>Never</strong> do this, as it <strong>will</strong> break and make people
+trying to use your code very annoyed.</p>
+
+<h3>Don&rsquo;t make your project root a package</h3>
+
+<p>Your project root should <em>contain</em> a python package, not be a package itself.
+If you do this, your <code>setup.py</code> will be very confusing (or not work at all) and
+it will be very difficult to run your code.</p>
+
+<h2>Conclusion</h2>
+
+<p>Really, writing a python package isn&rsquo;t hard. The rules above are very simple
+and will lead to simple, easy-to-read-and-understand python code.</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-21T12:29:00-07:00" pubdate data-updated="true">Jul 21<span>st</span>, 2013</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/examples/'>examples</a>, <a class='category' href='/blog/categories/packages/'>packages</a>, <a class='category' href='/blog/categories/python/'>python</a>
+
+
+</div>
+	
+	<div class="comments"><a href="#disqus_thread">Comments</a></div>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2013
+
+    _Harold Abnabit
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'habnablog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.habnab.it/blog/2013/07/21/python-packages-and-you/';
+        var disqus_url = 'http://blog.habnab.it/blog/2013/07/21/python-packages-and-you/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+</body>
+</html>
