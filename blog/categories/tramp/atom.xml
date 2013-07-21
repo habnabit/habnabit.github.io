@@ -1,93 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
 
-<!DOCTYPE HTML>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>_habnablog</title>
-	<meta name="author" content="_Harold Abnabit">
-
-	
-	<meta name="description" content="For quite a while now, I&rsquo;ve done a large amount of my text editing in emacs
-over ssh using TRAMP. It&rsquo;s extremely convenient to be able &hellip;">
-	
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-	<link href="/atom.xml" rel="alternate" title="_habnablog" type="application/atom+xml">
-	<link rel="canonical" href="">
-	<link href="/favicon.png" rel="shortcut icon">
-	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	
-</head>
-
-
-<body>
-	<header id="header" class="inner"><h1><a href="/">_habnablog</a></h1>
-<nav id="main-nav"><ul class="main">
-	<li><a href="/">Blog</a></li>
-	<li><a href="/blog/archives">Archives</a></li>
-</ul>
-</nav>
-<nav id="mobile-nav">
-	<div class="alignleft menu">
-		<a class="button">Menu</a>
-		<div class="container"><ul class="main">
-	<li><a href="/">Blog</a></li>
-	<li><a href="/blog/archives">Archives</a></li>
-</ul>
-</div>
-	</div>
-	<div class="alignright search">
-		<a class="button"></a>
-		<div class="container">
-			<form action="http://google.com/search" method="get">
-				<input type="text" name="q" results="0">
-				<input type="hidden" name="q" value="site:blog.habnab.it">
-			</form>
-		</div>
-	</div>
-</nav>
-<nav id="sub-nav" class="alignright">
-	<div class="social">
-		
-		
-		
-		
-		<a class="github" href="https://github.com/habnabit" title="GitHub">GitHub</a>
-		
+  <title><![CDATA[Category: TRAMP | _habnablog]]></title>
+  <link href="http://blog.habnab.it/blog/categories/tramp/atom.xml" rel="self"/>
+  <link href="http://blog.habnab.it/"/>
+  <updated>2013-07-21T11:23:47-07:00</updated>
+  <id>http://blog.habnab.it/</id>
+  <author>
+    <name><![CDATA[_Harold Abnabit]]></name>
     
-		
-		
-		
-		
-		
-		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
-		
-    
-	</div>
-	<form class="search" action="http://google.com/search" method="get">
-		<input class="alignright" type="text" name="q" results="0">
-		<input type="hidden" name="q" value="site:blog.habnab.it">
-	</form>
-</nav>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
 
-</header>
-	
-		
-	
-	<div id="content" class="inner">
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/06/25/emacsclient-and-tramp/">
-		
-			Emacsclient and TRAMP</a>
-	</h2>
-	<div class="entry-content">
-		<p>For quite a while now, I&rsquo;ve done a large amount of my text editing in emacs
+  
+  <entry>
+    <title type="html"><![CDATA[emacsclient and TRAMP]]></title>
+    <link href="http://blog.habnab.it/blog/2013/06/25/emacsclient-and-tramp/"/>
+    <updated>2013-06-25T07:47:00-07:00</updated>
+    <id>http://blog.habnab.it/blog/2013/06/25/emacsclient-and-tramp</id>
+    <content type="html"><![CDATA[<p>For quite a while now, I&rsquo;ve done a large amount of my text editing in emacs
 over ssh using <a href="http://www.emacswiki.org/emacs/TrampMode">TRAMP</a>. It&rsquo;s <em>extremely</em> convenient to be able to run one
 instance of emacs locally instead of spawning an editor remotely and
 interacting with it over ssh. I&rsquo;ve tried using <a href="http://fuse.sourceforge.net/sshfs.html">sshfs</a> in the past, but it&rsquo;s
@@ -110,15 +41,14 @@ emacsclient connections from the remote host to my local machine, but
 emacsclient doesn&rsquo;t anticipate this case. The emacsclient protocol is very
 simple: ASCII commands delimited with line feeds. So, for example:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ emacsclient /foo/bar
-</span><span class='line'># and this sends (approximately):
-</span><span class='line'>-auth some-gunk-here
-</span><span class='line'>-dir /foo -file /foo/bar</span></code></pre></td></tr></table></div></figure>
+<p>```
+$ emacsclient /foo/bar</p>
 
+<h1>and this sends (approximately):</h1>
+
+<p>-auth some-gunk-here
+-dir /foo -file /foo/bar
+```</p>
 
 <p>The problem is that this is being sent to your <em>local</em> emacs, which then tries
 to load the <em>local</em> <code>/foo/bar</code>. A TRAMP path is in the form of (approximately)
@@ -165,7 +95,7 @@ authentication file.</p></li>
 <p>Here are the versions of <code>emacsclient.sh</code> and <code>remote-emacsclient.el</code> as of
 2013-06-25:</p>
 
-<figure class='code'><figcaption><span> (emacsclient.sh)</span> <a href='/downloads/code/remote-emacsclient/emacsclient.sh'>download</a></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (emacsclient.sh)</span> <a href='/downloads/code/remote-emacsclient/emacsclient.sh'>download</a></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -264,12 +194,9 @@ authentication file.</p></li>
 </span><span class='line'><span class="k">done</span>
 </span><span class='line'>
 </span><span class='line'><span class="nb">printf</span> <span class="s2">&quot;%s\n&quot;</span> <span class="s2">&quot;${args}&quot;</span> | nc <span class="nv">$client_host</span> | unquote
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-
-
-
-<figure class='code'><figcaption><span> (remote-emacsclient.el)</span> <a href='/downloads/code/remote-emacsclient/remote-emacsclient.el'>download</a></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (remote-emacsclient.el)</span> <a href='/downloads/code/remote-emacsclient/remote-emacsclient.el'>download</a></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -465,8 +392,8 @@ authentication file.</p></li>
 </span><span class='line'><span class="s">explanation of the auth file path.&quot;</span>
 </span><span class='line'>  <span class="ss">:group</span> <span class="ss">&#39;tramp</span>
 </span><span class='line'>  <span class="ss">:type</span> <span class="o">&#39;</span><span class="p">(</span><span class="nv">repeat</span> <span class="p">(</span><span class="nb">list</span> <span class="p">(</span><span class="nv">choice</span> <span class="ss">:tag</span> <span class="s">&quot;Host regexp&quot;</span> <span class="nv">regexp</span> <span class="p">(</span><span class="nv">const</span> <span class="no">nil</span><span class="p">))</span>
-</span><span class='line'>             <span class="p">(</span><span class="nv">choice</span> <span class="ss">:tag</span> <span class="s">&quot;User regexp&quot;</span> <span class="nv">regexp</span> <span class="p">(</span><span class="nv">const</span> <span class="no">nil</span><span class="p">))</span>
-</span><span class='line'>             <span class="p">(</span><span class="nv">choice</span> <span class="ss">:tag</span> <span class="s">&quot;emacsclient auth path&quot;</span> <span class="nb">string</span> <span class="p">(</span><span class="nv">const</span> <span class="no">nil</span><span class="p">)))))</span>
+</span><span class='line'>		       <span class="p">(</span><span class="nv">choice</span> <span class="ss">:tag</span> <span class="s">&quot;User regexp&quot;</span> <span class="nv">regexp</span> <span class="p">(</span><span class="nv">const</span> <span class="no">nil</span><span class="p">))</span>
+</span><span class='line'>		       <span class="p">(</span><span class="nv">choice</span> <span class="ss">:tag</span> <span class="s">&quot;emacsclient auth path&quot;</span> <span class="nb">string</span> <span class="p">(</span><span class="nv">const</span> <span class="no">nil</span><span class="p">)))))</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nb">defun</span> <span class="nv">tramp-get-remote-emacsclient-auth-file</span> <span class="p">(</span><span class="nv">vec</span><span class="p">)</span>
 </span><span class='line'>  <span class="s">&quot;Determine the full TRAMP path for the remote emacsclient</span>
@@ -516,8 +443,7 @@ authentication file.</p></li>
 </span><span class='line'>  <span class="p">(</span><span class="nv">tramp-save-remote-emacsclient-auth-file</span> <span class="nv">vec</span><span class="p">))</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">(</span><span class="nb">provide</span> <span class="ss">&#39;remote-emacsclient</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>The most up-to-date versions of each will be in <a href="https://github.com/habnabit/dotfiles">my dotfiles repository</a>. For
 convenience, here are links to the files within the repository:
@@ -526,12 +452,10 @@ convenience, here are links to the files within the repository:
 <p>Configuration is pretty straightforward. In my local <code>.emacs</code> file,
 <code>(server-start)</code> got changed to:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='common-lisp'><span class='line'><span class="p">(</span><span class="nb">require</span> <span class="ss">&#39;remote-emacsclient</span><span class="p">)</span>
-</span><span class='line'><span class="p">(</span><span class="nv">update-tramp-emacs-server-port-forward</span> <span class="nv">tramp-default-method</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<p><code>common-lisp
+(require 'remote-emacsclient)
+(update-tramp-emacs-server-port-forward tramp-default-method)
+</code></p>
 
 <p>The <code>update-tramp-emacs-server-port-forward</code> function takes a <a href="http://www.gnu.org/software/emacs/manual/html_node/tramp/External-methods.html">TRAMP method</a>
 and updates the ssh arguments to that method to include a <code>-R</code> flag forwarding
@@ -547,14 +471,11 @@ auth file by host and/or by user.</p>
 
 <p>And in my <code>.zshrc</code>:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>: <span class="k">${</span><span class="nv">remote_emacs_auth</span><span class="p">:=</span><span class="s2">&quot;$HOME/.emacs.d/remote-server&quot;</span><span class="k">}</span>; <span class="nb">export </span>remote_emacs_auth
-</span><span class='line'><span class="nb">export </span><span class="nv">EDITOR</span><span class="o">=</span><span class="s2">&quot;$HOME/.dotfiles/emacsclient.sh&quot;</span>
-</span><span class='line'><span class="nb">alias </span><span class="nv">emacs</span><span class="o">=</span><span class="s2">&quot;$HOME/.dotfiles/emacsclient.sh -n&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<p><code>sh
+: ${remote_emacs_auth:="$HOME/.emacs.d/remote-server"}; export remote_emacs_auth
+export EDITOR="$HOME/.dotfiles/emacsclient.sh"
+alias emacs="$HOME/.dotfiles/emacsclient.sh -n"
+</code></p>
 
 <p><code>$remote_emacs_auth</code>&rsquo;s default mirrors <code>remote-emacsclient.el</code>&rsquo;s default of
 writing the auth file to <code>~/.emacs.d/remote-server</code>. Since <code>emacsclient.sh</code> is
@@ -580,290 +501,7 @@ interactively. Running it will write a new auth file for the connection
 corresponding to the current buffer.</p></li>
 </ol>
 
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
+]]></content>
+  </entry>
   
-
-
-<time datetime="2013-06-25T07:47:00-07:00" pubdate data-updated="true">Jun 25<span>th</span>, 2013</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/tramp/'>TRAMP</a>, <a class='category' href='/blog/categories/emacs/'>emacs</a>
-
-
-</div>
-	
-	<div class="comments"><a href="/blog/2013/06/25/emacsclient-and-tramp/#disqus_thread">Comments</a></div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2012/05/28/amp-and-starttls/">
-		
-			AMP and StartTLS</a>
-	</h2>
-	<div class="entry-content">
-		<p>Recently, I&rsquo;ve been hacking on a thing which has been using <a href="http://twistedmatrix.com/">Twisted</a>&rsquo;s <a href="http://twistedmatrix.com/documents/current/api/twisted.protocols.amp.html">AMP</a>
-for making remote calls. I&rsquo;ve developed a bit of a fetish for SSL client
-certificates, so I was hoping to use that for authenticating clients. AMP does
-have <a href="http://twistedmatrix.com/documents/current/api/twisted.protocols.amp.StartTLS.html">STARTTLS</a> support builtin, but I couldn&rsquo;t find any examples! Here&rsquo;s what
-I found and figured out, for future hackers:</p>
-
-<h2>Always initiate from the client</h2>
-
-<p>Until <a href="http://tm.tl/5690">a bug in Twisted</a> is resolved, only the client will be able to
-successfully initiate the StartTLS. Here&rsquo;s a full runnable example.</p>
-
-<figure class='code'><figcaption><span> (basic.py)</span> <a href='/downloads/code/amp-starttls/basic.py'>download</a></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">protocol</span><span class="p">,</span> <span class="n">reactor</span>
-</span><span class='line'><span class="kn">from</span> <span class="nn">twisted.protocols</span> <span class="kn">import</span> <span class="n">amp</span>
-</span><span class='line'><span class="kn">from</span> <span class="nn">twisted.python</span> <span class="kn">import</span> <span class="n">log</span>
-</span><span class='line'>
-</span><span class='line'><span class="kn">import</span> <span class="nn">sys</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">SupCommand</span><span class="p">(</span><span class="n">amp</span><span class="o">.</span><span class="n">Command</span><span class="p">):</span>
-</span><span class='line'>    <span class="k">pass</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">ServerProtocol</span><span class="p">(</span><span class="n">amp</span><span class="o">.</span><span class="n">AMP</span><span class="p">):</span>
-</span><span class='line'>    <span class="nd">@SupCommand.responder</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">sup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span class='line'>        <span class="n">log</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="s">&#39;got sup&#39;</span><span class="p">)</span>
-</span><span class='line'>        <span class="k">return</span> <span class="p">{}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">ServerFactory</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">ServerFactory</span><span class="p">):</span>
-</span><span class='line'>    <span class="n">protocol</span> <span class="o">=</span> <span class="n">ServerProtocol</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">ClientProtocol</span><span class="p">(</span><span class="n">amp</span><span class="o">.</span><span class="n">AMP</span><span class="p">):</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">connectionMade</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span class='line'>        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">callRemote</span><span class="p">(</span><span class="n">amp</span><span class="o">.</span><span class="n">StartTLS</span><span class="p">)</span>
-</span><span class='line'>        <span class="n">d</span><span class="o">.</span><span class="n">addCallback</span><span class="p">(</span><span class="k">lambda</span> <span class="n">ign</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">callRemote</span><span class="p">(</span><span class="n">SupCommand</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">ClientFactory</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">ClientFactory</span><span class="p">):</span>
-</span><span class='line'>    <span class="n">protocol</span> <span class="o">=</span> <span class="n">ClientProtocol</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;client&#39;</span><span class="p">:</span>
-</span><span class='line'>    <span class="n">reactor</span><span class="o">.</span><span class="n">connectTCP</span><span class="p">(</span><span class="s">&#39;localhost&#39;</span><span class="p">,</span> <span class="mi">9991</span><span class="p">,</span> <span class="n">ClientFactory</span><span class="p">())</span>
-</span><span class='line'><span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;server&#39;</span><span class="p">:</span>
-</span><span class='line'>    <span class="n">reactor</span><span class="o">.</span><span class="n">listenTCP</span><span class="p">(</span><span class="mi">9991</span><span class="p">,</span> <span class="n">ServerFactory</span><span class="p">())</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">log</span><span class="o">.</span><span class="n">startLogging</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
-</span><span class='line'><span class="n">reactor</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Using client certificates isn&rsquo;t hard</h2>
-
-<p>Specifying which certificate to use for both peers requires only minor
-modifications. Here&rsquo;s another runnable example, assuming you have an <code>ssl.pem</code>
-file.</p>
-
-<figure class='code'><figcaption><span> (client-cert.py)</span> <a href='/downloads/code/amp-starttls/client-cert.py'>download</a></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">protocol</span><span class="p">,</span> <span class="n">reactor</span><span class="p">,</span> <span class="n">ssl</span>
-</span><span class='line'><span class="kn">from</span> <span class="nn">twisted.protocols</span> <span class="kn">import</span> <span class="n">amp</span>
-</span><span class='line'><span class="kn">from</span> <span class="nn">twisted.python</span> <span class="kn">import</span> <span class="n">log</span>
-</span><span class='line'>
-</span><span class='line'><span class="kn">import</span> <span class="nn">sys</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">cert</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">PrivateCertificate</span><span class="o">.</span><span class="n">loadPEM</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s">&#39;ssl.pem&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
-</span><span class='line'><span class="n">certParams</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;tls_localCertificate&#39;</span><span class="p">:</span> <span class="n">cert</span><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">SupCommand</span><span class="p">(</span><span class="n">amp</span><span class="o">.</span><span class="n">Command</span><span class="p">):</span>
-</span><span class='line'>    <span class="k">pass</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">ServerProtocol</span><span class="p">(</span><span class="n">amp</span><span class="o">.</span><span class="n">AMP</span><span class="p">):</span>
-</span><span class='line'>    <span class="nd">@SupCommand.responder</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">sup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span class='line'>        <span class="n">log</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="s">&#39;got sup&#39;</span><span class="p">)</span>
-</span><span class='line'>        <span class="k">return</span> <span class="p">{}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nd">@amp.StartTLS.responder</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">startTLS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span class='line'>        <span class="k">return</span> <span class="n">certParams</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">ServerFactory</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">ServerFactory</span><span class="p">):</span>
-</span><span class='line'>    <span class="n">protocol</span> <span class="o">=</span> <span class="n">ServerProtocol</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">ClientProtocol</span><span class="p">(</span><span class="n">amp</span><span class="o">.</span><span class="n">AMP</span><span class="p">):</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">connectionMade</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span class='line'>        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">callRemote</span><span class="p">(</span><span class="n">amp</span><span class="o">.</span><span class="n">StartTLS</span><span class="p">,</span> <span class="o">**</span><span class="n">certParams</span><span class="p">)</span>
-</span><span class='line'>        <span class="n">d</span><span class="o">.</span><span class="n">addCallback</span><span class="p">(</span><span class="k">lambda</span> <span class="n">ign</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">callRemote</span><span class="p">(</span><span class="n">SupCommand</span><span class="p">))</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">ClientFactory</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">ClientFactory</span><span class="p">):</span>
-</span><span class='line'>    <span class="n">protocol</span> <span class="o">=</span> <span class="n">ClientProtocol</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;client&#39;</span><span class="p">:</span>
-</span><span class='line'>    <span class="n">reactor</span><span class="o">.</span><span class="n">connectTCP</span><span class="p">(</span><span class="s">&#39;localhost&#39;</span><span class="p">,</span> <span class="mi">9991</span><span class="p">,</span> <span class="n">ClientFactory</span><span class="p">())</span>
-</span><span class='line'><span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;server&#39;</span><span class="p">:</span>
-</span><span class='line'>    <span class="n">reactor</span><span class="o">.</span><span class="n">listenTCP</span><span class="p">(</span><span class="mi">9991</span><span class="p">,</span> <span class="n">ServerFactory</span><span class="p">())</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">log</span><span class="o">.</span><span class="n">startLogging</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
-</span><span class='line'><span class="n">reactor</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>ssl.pem</code> must include both the certificate and the key. Though the example
-doesn&rsquo;t demonstrate it, certificate authorities to use can also be specified
-using the <code>tls_verifyAuthorities</code> parameter (see the API docs for <a href="http://twistedmatrix.com/documents/current/api/twisted.protocols.amp.StartTLS.html">StartTLS</a>).</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-05-28T22:46:00-07:00" pubdate data-updated="true">May 28<span>th</span>, 2012</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/amp/'>AMP</a>, <a class='category' href='/blog/categories/examples/'>examples</a>, <a class='category' href='/blog/categories/python/'>python</a>, <a class='category' href='/blog/categories/twisted/'>twisted</a>
-
-
-</div>
-	
-	<div class="comments"><a href="/blog/2012/05/28/amp-and-starttls/#disqus_thread">Comments</a></div>
-	
-</div>
-</article>
-
-<nav id="pagenavi">
-    
-    
-    <div class="center"><a href="/blog/archives">Blog Archives</a></div>
-</nav></div>
-	<footer id="footer" class="inner">Copyright &copy; 2013
-
-    _Harold Abnabit
-
-</footer>
-	<script src="/javascripts/slash.js"></script>
-<script src="/javascripts/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-(function($){
-	$('.fancybox').fancybox();
-})(jQuery);
-</script> <!-- Delete or comment this line to disable Fancybox -->
-
-
-<script type="text/javascript">
-      var disqus_shortname = 'habnablog';
-      
-        
-        var disqus_script = 'count.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
-
-
-
-
-
-</body>
-</html>
+</feed>

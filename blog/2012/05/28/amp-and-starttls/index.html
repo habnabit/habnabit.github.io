@@ -1,0 +1,338 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>AMP and StartTLS - _habnablog</title>
+	<meta name="author" content="_Harold Abnabit">
+
+	
+	<meta name="description" content="Recently, I&rsquo;ve been hacking on a thing which has been using Twisted&rsquo;s AMP
+for making remote calls. I&rsquo;ve developed a bit of a fetish &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="_habnablog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">_habnablog</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:blog.habnab.it">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		
+		<a class="github" href="https://github.com/habnabit" title="GitHub">GitHub</a>
+		
+    
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+    
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:blog.habnab.it">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">AMP and StartTLS</h2>
+	<div class="entry-content"><p>Recently, I&rsquo;ve been hacking on a thing which has been using <a href="http://twistedmatrix.com/">Twisted</a>&rsquo;s <a href="http://twistedmatrix.com/documents/current/api/twisted.protocols.amp.html">AMP</a>
+for making remote calls. I&rsquo;ve developed a bit of a fetish for SSL client
+certificates, so I was hoping to use that for authenticating clients. AMP does
+have <a href="http://twistedmatrix.com/documents/current/api/twisted.protocols.amp.StartTLS.html">STARTTLS</a> support builtin, but I couldn&rsquo;t find any examples! Here&rsquo;s what
+I found and figured out, for future hackers:</p>
+
+<h2>Always initiate from the client</h2>
+
+<p>Until <a href="http://tm.tl/5690">a bug in Twisted</a> is resolved, only the client will be able to
+successfully initiate the StartTLS. Here&rsquo;s a full runnable example.</p>
+
+<figure class='code'><figcaption><span> (basic.py)</span> <a href='/downloads/code/amp-starttls/basic.py'>download</a></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">protocol</span><span class="p">,</span> <span class="n">reactor</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">twisted.protocols</span> <span class="kn">import</span> <span class="n">amp</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">twisted.python</span> <span class="kn">import</span> <span class="n">log</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="nn">sys</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">SupCommand</span><span class="p">(</span><span class="n">amp</span><span class="o">.</span><span class="n">Command</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">pass</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ServerProtocol</span><span class="p">(</span><span class="n">amp</span><span class="o">.</span><span class="n">AMP</span><span class="p">):</span>
+</span><span class='line'>    <span class="nd">@SupCommand.responder</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">sup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class='line'>        <span class="n">log</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="s">&#39;got sup&#39;</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">return</span> <span class="p">{}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ServerFactory</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">ServerFactory</span><span class="p">):</span>
+</span><span class='line'>    <span class="n">protocol</span> <span class="o">=</span> <span class="n">ServerProtocol</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ClientProtocol</span><span class="p">(</span><span class="n">amp</span><span class="o">.</span><span class="n">AMP</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">connectionMade</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class='line'>        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">callRemote</span><span class="p">(</span><span class="n">amp</span><span class="o">.</span><span class="n">StartTLS</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">d</span><span class="o">.</span><span class="n">addCallback</span><span class="p">(</span><span class="k">lambda</span> <span class="n">ign</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">callRemote</span><span class="p">(</span><span class="n">SupCommand</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ClientFactory</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">ClientFactory</span><span class="p">):</span>
+</span><span class='line'>    <span class="n">protocol</span> <span class="o">=</span> <span class="n">ClientProtocol</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;client&#39;</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">reactor</span><span class="o">.</span><span class="n">connectTCP</span><span class="p">(</span><span class="s">&#39;localhost&#39;</span><span class="p">,</span> <span class="mi">9991</span><span class="p">,</span> <span class="n">ClientFactory</span><span class="p">())</span>
+</span><span class='line'><span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;server&#39;</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">reactor</span><span class="o">.</span><span class="n">listenTCP</span><span class="p">(</span><span class="mi">9991</span><span class="p">,</span> <span class="n">ServerFactory</span><span class="p">())</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">log</span><span class="o">.</span><span class="n">startLogging</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+</span><span class='line'><span class="n">reactor</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Using client certificates isn&rsquo;t hard</h2>
+
+<p>Specifying which certificate to use for both peers requires only minor
+modifications. Here&rsquo;s another runnable example, assuming you have an <code>ssl.pem</code>
+file.</p>
+
+<figure class='code'><figcaption><span> (client-cert.py)</span> <a href='/downloads/code/amp-starttls/client-cert.py'>download</a></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">protocol</span><span class="p">,</span> <span class="n">reactor</span><span class="p">,</span> <span class="n">ssl</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">twisted.protocols</span> <span class="kn">import</span> <span class="n">amp</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">twisted.python</span> <span class="kn">import</span> <span class="n">log</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="nn">sys</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">cert</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">PrivateCertificate</span><span class="o">.</span><span class="n">loadPEM</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s">&#39;ssl.pem&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</span><span class='line'><span class="n">certParams</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;tls_localCertificate&#39;</span><span class="p">:</span> <span class="n">cert</span><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">SupCommand</span><span class="p">(</span><span class="n">amp</span><span class="o">.</span><span class="n">Command</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">pass</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ServerProtocol</span><span class="p">(</span><span class="n">amp</span><span class="o">.</span><span class="n">AMP</span><span class="p">):</span>
+</span><span class='line'>    <span class="nd">@SupCommand.responder</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">sup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class='line'>        <span class="n">log</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="s">&#39;got sup&#39;</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">return</span> <span class="p">{}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@amp.StartTLS.responder</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">startTLS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">certParams</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ServerFactory</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">ServerFactory</span><span class="p">):</span>
+</span><span class='line'>    <span class="n">protocol</span> <span class="o">=</span> <span class="n">ServerProtocol</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ClientProtocol</span><span class="p">(</span><span class="n">amp</span><span class="o">.</span><span class="n">AMP</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">connectionMade</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class='line'>        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">callRemote</span><span class="p">(</span><span class="n">amp</span><span class="o">.</span><span class="n">StartTLS</span><span class="p">,</span> <span class="o">**</span><span class="n">certParams</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">d</span><span class="o">.</span><span class="n">addCallback</span><span class="p">(</span><span class="k">lambda</span> <span class="n">ign</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">callRemote</span><span class="p">(</span><span class="n">SupCommand</span><span class="p">))</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ClientFactory</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">ClientFactory</span><span class="p">):</span>
+</span><span class='line'>    <span class="n">protocol</span> <span class="o">=</span> <span class="n">ClientProtocol</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;client&#39;</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">reactor</span><span class="o">.</span><span class="n">connectTCP</span><span class="p">(</span><span class="s">&#39;localhost&#39;</span><span class="p">,</span> <span class="mi">9991</span><span class="p">,</span> <span class="n">ClientFactory</span><span class="p">())</span>
+</span><span class='line'><span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;server&#39;</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">reactor</span><span class="o">.</span><span class="n">listenTCP</span><span class="p">(</span><span class="mi">9991</span><span class="p">,</span> <span class="n">ServerFactory</span><span class="p">())</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">log</span><span class="o">.</span><span class="n">startLogging</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+</span><span class='line'><span class="n">reactor</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>ssl.pem</code> must include both the certificate and the key. Though the example
+doesn&rsquo;t demonstrate it, certificate authorities to use can also be specified
+using the <code>tls_verifyAuthorities</code> parameter (see the API docs for <a href="http://twistedmatrix.com/documents/current/api/twisted.protocols.amp.StartTLS.html">StartTLS</a>).</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-28T22:46:00-07:00" pubdate data-updated="true">May 28<span>th</span>, 2012</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/amp/'>AMP</a>, <a class='category' href='/blog/categories/examples/'>examples</a>, <a class='category' href='/blog/categories/python/'>python</a>, <a class='category' href='/blog/categories/twisted/'>twisted</a>
+
+
+</div>
+	
+	<div class="comments"><a href="#disqus_thread">Comments</a></div>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2013
+
+    _Harold Abnabit
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'habnablog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.habnab.it/blog/2012/05/28/amp-and-starttls/';
+        var disqus_url = 'http://blog.habnab.it/blog/2012/05/28/amp-and-starttls/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+</body>
+</html>

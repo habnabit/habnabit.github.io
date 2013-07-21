@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
+    <url>
+        <loc>http://blog.habnab.it/blog/2012/05/28/amp-and-starttls/</loc>
+        <lastmod>2013-07-21T11:01:35-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://blog.habnab.it/blog/2013/06/25/emacsclient-and-tramp/</loc>
+        <lastmod>2013-07-21T11:01:35-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://blog.habnab.it/blog/archives/</loc>
+        <lastmod>2013-07-21T11:01:35-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://blog.habnab.it/</loc>
+        <lastmod>2013-07-21T11:01:35-07:00</lastmod>
+    </url>
+</urlset>
