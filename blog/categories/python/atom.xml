@@ -4,7 +4,7 @@
   <title><![CDATA[Category: python | _habnablog]]></title>
   <link href="http://blog.habnab.it/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://blog.habnab.it/"/>
-  <updated>2013-07-21T14:54:08-07:00</updated>
+  <updated>2013-07-22T07:23:11-07:00</updated>
   <id>http://blog.habnab.it/</id>
   <author>
     <name><![CDATA[_Harold Abnabit]]></name>
@@ -188,10 +188,14 @@ elsewhere if you actually want to be able to test it. This way, test code can
 <em>also</em> <code>from passacre.application import main</code> and be able to call that
 function.</p>
 
-<p>But, sometimes a project has multiple executables or otherwise wants to not
-have to require users to do <code>python -m theirpackage</code>. For this case, setuptools
-has <a href="http://pythonhosted.org/setuptools/setuptools.html#automatic-script-creation">automatic script creation</a>. Here&rsquo;s an excerpt from passacre&rsquo;s
-<code>setup.py</code> file:</p>
+<p><code>python -m</code> is not limited to executing packages. For times when you want to
+quickly run some module that has an <code>if __name__ == '__main__':</code> block in it,
+you can use <code>python -m passacre.thatmodule</code>. Importantly, this will ensure that
+python recognizes your whole package, which means that your imports won&rsquo;t fail.</p>
+
+<p>Sometimes a project wants explicit binaries instead of requiring their users to
+use <code>python -m</code>. For this case, setuptools has <a href="http://pythonhosted.org/setuptools/setuptools.html#automatic-script-creation">automatic script creation</a>.
+Here&rsquo;s an excerpt from passacre&rsquo;s <code>setup.py</code> file:</p>
 
 <p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -234,6 +238,28 @@ important&mdash;as a part of the install process, the shebang line (e.g.
 <code>setup.py</code>. So, if someone does <code>/usr/local/bin/python2.6 setup.py install</code>,
 <code>passacre</code> will start with <code>#!/usr/local/bin/python2.6</code>.</p>
 
+<p>Additionally, <code>python -m</code> and automatic script creation can be used beautifully
+together&mdash;a project can have a <code>scripts</code> subpackage containing one module for
+every executable script. For example, <code>passacre_generate</code> could be
+<code>passacre_generate = passacre.scripts.generate:main</code> and also contain:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">if</span> <span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">name</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;</span> <span class="o">==</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">main</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;&amp;</span><span class="n">rsquo</span><span class="p">;:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">main</span><span class="p">()</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>For projects with a lot of scripts, this is a good organization method to keep
+the scripts separate from the more library-ish code.</p>
+
 <h2>Documentation</h2>
 
 <p>Please have some, especially if you&rsquo;re distributing your package. Docstrings
@@ -241,9 +267,6 @@ are a good start, but a tutorial written with <a href="http://sphinx-doc.org/">s
 with usage examples goes a long way.</p>
 
 <h2>Common pitfalls</h2>
-
-<p>The first one is such a common issue that I&rsquo;m going to make a subheading just
-to say:</p>
 
 <h3>Don&rsquo;t directly run modules inside packages</h3>
 
@@ -259,7 +282,7 @@ to use <code>python -m</code>, or <a href="http://pythonhosted.org/setuptools/se
 <a href="http://pytest.org/">use a test runner</a>. If you don&rsquo;t think any of those cover your use case,
 leave a comment and I&rsquo;ll show you a better method.</p>
 
-<h3>Don&rsquo;t set <code>PYTHONPATH</code></h3>
+<h3>Don&rsquo;t set <code>PYTHONPATH</code> to try to make it go</h3>
 
 <p>If you think you have to set <code>PYTHONPATH</code>, you&rsquo;ve probably fallen victim to the
 first pitfall and are trying to execute a module directly. With proper package
