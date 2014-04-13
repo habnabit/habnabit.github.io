@@ -4,7 +4,7 @@
   <title><![CDATA[Category: examples | _habnablog]]></title>
   <link href="http://blog.habnab.it/blog/categories/examples/atom.xml" rel="self"/>
   <link href="http://blog.habnab.it/"/>
-  <updated>2013-07-22T07:23:11-07:00</updated>
+  <updated>2014-04-13T14:12:12-04:00</updated>
   <id>http://blog.habnab.it/</id>
   <author>
     <name><![CDATA[_Harold Abnabit]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Python Packages and You]]></title>
     <link href="http://blog.habnab.it/blog/2013/07/21/python-packages-and-you/"/>
-    <updated>2013-07-21T12:29:00-07:00</updated>
+    <updated>2013-07-21T12:29:00-04:00</updated>
     <id>http://blog.habnab.it/blog/2013/07/21/python-packages-and-you</id>
     <content type="html"><![CDATA[<p>Jean-Paul Calderone wrote <a href="http://as.ynchrono.us/2007/12/filesystem-structure-of-python-project_21.html">an excellent blog post</a> on the right way to
 structure a python project. This post will build on that post by covering
@@ -310,7 +310,7 @@ and will lead to simple, easy-to-read-and-understand python code.</p>
   <entry>
     <title type="html"><![CDATA[AMP and StartTLS]]></title>
     <link href="http://blog.habnab.it/blog/2012/05/28/amp-and-starttls/"/>
-    <updated>2012-05-28T22:46:00-07:00</updated>
+    <updated>2012-05-28T22:46:00-04:00</updated>
     <id>http://blog.habnab.it/blog/2012/05/28/amp-and-starttls</id>
     <content type="html"><![CDATA[<p>Recently, I&rsquo;ve been hacking on a thing which has been using <a href="http://twistedmatrix.com/">Twisted</a>&rsquo;s <a href="http://twistedmatrix.com/documents/current/api/twisted.protocols.amp.html">AMP</a>
 for making remote calls. I&rsquo;ve developed a bit of a fetish for SSL client

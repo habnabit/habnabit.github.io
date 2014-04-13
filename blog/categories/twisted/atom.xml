@@ -4,7 +4,7 @@
   <title><![CDATA[Category: twisted | _habnablog]]></title>
   <link href="http://blog.habnab.it/blog/categories/twisted/atom.xml" rel="self"/>
   <link href="http://blog.habnab.it/"/>
-  <updated>2013-07-22T07:23:11-07:00</updated>
+  <updated>2014-04-13T14:12:12-04:00</updated>
   <id>http://blog.habnab.it/</id>
   <author>
     <name><![CDATA[_Harold Abnabit]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[AMP and StartTLS]]></title>
     <link href="http://blog.habnab.it/blog/2012/05/28/amp-and-starttls/"/>
-    <updated>2012-05-28T22:46:00-07:00</updated>
+    <updated>2012-05-28T22:46:00-04:00</updated>
     <id>http://blog.habnab.it/blog/2012/05/28/amp-and-starttls</id>
     <content type="html"><![CDATA[<p>Recently, I&rsquo;ve been hacking on a thing which has been using <a href="http://twistedmatrix.com/">Twisted</a>&rsquo;s <a href="http://twistedmatrix.com/documents/current/api/twisted.protocols.amp.html">AMP</a>
 for making remote calls. I&rsquo;ve developed a bit of a fetish for SSL client

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: emacs | _habnablog]]></title>
   <link href="http://blog.habnab.it/blog/categories/emacs/atom.xml" rel="self"/>
   <link href="http://blog.habnab.it/"/>
-  <updated>2013-07-22T07:23:11-07:00</updated>
+  <updated>2014-04-13T14:12:12-04:00</updated>
   <id>http://blog.habnab.it/</id>
   <author>
     <name><![CDATA[_Harold Abnabit]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[emacsclient and TRAMP]]></title>
     <link href="http://blog.habnab.it/blog/2013/06/25/emacsclient-and-tramp/"/>
-    <updated>2013-06-25T07:47:00-07:00</updated>
+    <updated>2013-06-25T07:47:00-04:00</updated>
     <id>http://blog.habnab.it/blog/2013/06/25/emacsclient-and-tramp</id>
     <content type="html"><![CDATA[<p>For quite a while now, I&rsquo;ve done a large amount of my text editing in emacs
 over ssh using <a href="http://www.emacswiki.org/emacs/TrampMode">TRAMP</a>. It&rsquo;s <em>extremely</em> convenient to be able to run one

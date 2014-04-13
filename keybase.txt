@@ -1,0 +1,64 @@
+==================================================================
+https://keybase.io/habnabit
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://blog.habnab.it
+  * I am habnabit (https://keybase.io/habnabit) on keybase.
+  * I have a public key with fingerprint 61A4 97F3 DAFE 523F 6D38  6EB4 10F2 FD0D 67DE 9C2A
+
+To claim this, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "fingerprint": "61a497f3dafe523f6d386eb410f2fd0d67de9c2a",
+            "host": "keybase.io",
+            "key_id": "10F2FD0D67DE9C2A",
+            "uid": "186fdaf64d84829dc48f929c29051800",
+            "username": "habnabit"
+        },
+        "service": {
+            "hostname": "blog.habnab.it",
+            "protocol": "http:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1397412059,
+    "expire_in": 157680000,
+    "prev": "162b7b75d24814af7d69008814418a4ad96521817336e8a7913f82085353a5bb",
+    "seqno": 4,
+    "tag": "signature"
+}
+
+with the aforementioned key, yielding the PGP signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1
+
+owE1kVtIFGEUx3etlDY0e9JiI5wgUdZt7petjPKS6EOEFEHJNrPzzTqszoyz46rl
+toRkF4yUjLLSCCTxlogkUdFa1FKrhGz1oLbiJegKRUpFFPVN2tN3vnN+//85h9Oc
+vMKSYE39+jvZO30t2zo6siBYSovHp44hgirWIa5jiA/8eyRZ8QJd02XFQFwIjfEk
+x0iEyEuAwgmJFgmWBgKJoRIuiahIMyLgPDiPOJBy1W8qoI3A+4FTVmEOftyyCLMY
+WogX5qP5NJNfwOXhu2CteqnA0hI0p0mRJVmcEz0kK3E4tORQCmNR1AT9QFf4SgDp
+cl5QeEE2kKADgdmA7AHmzGbrZUKoUL3OJcwJOQei6aqhetQKU20YmsuUGnWaydYA
+wb3s4hZkRYSbQ0EA6H5ZVRAXBkmPIZu2GMExJIajFOdAQK0m68AtmwTF0HBGFDXb
+gIC5Do0LjMBQIk6yGMlLjEhzKMrCmMRYnuRFjqZwjMUYgqAByzMcRkgsjrIUQRE8
+JQiIuVeVoiIuEo7Je6GlX/YqvFGtAyR4xmpfabEmWBJXJZi3s9hWp/6/qF6V9Mc3
+tmNDbuUMFe3M3TJJ0N3OknPak1i853E08CZiyxzbmBVKOhXL2Pm8t2F0KC0W1+L7
+jqRHn06kN05+7+kT+9TMd92xrsYDJyj7UM2jl60vpOOX56s3nQwvTrXF+6MFt9fO
+Jjbe0zqoim9bK4fDzQN70i88OFv8wRg5n5tTv1jvi1y0Uve9bZGe6I+W7EJNXp84
+vH+h9FJrMOVLkM95mHK4Zah7zefdOWl5z+bn9g4OvyqKXvnZ1jG7PRTEFjf7yg5l
+ZjHhpoaZXyXT7zuLusbtoYxwdlfTJ/vHjrnT2/omyLKjofpbvXdeY7arQnt0Yd0N
+22D73dqbY5GBg2+v9/8F
+=M8E8
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/habnabit
+
+==================================================================
